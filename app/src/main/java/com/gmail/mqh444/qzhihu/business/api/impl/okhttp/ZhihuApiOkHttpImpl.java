@@ -50,6 +50,7 @@ public class ZhihuApiOkHttpImpl implements ZhihuApi {
     public GetStartInfoResponse getStartInfoResponse(GetStartInfoRequest request) throws NetWorkException {
         XLog.d("ZhihuApiOkHttpImpl.getStartInfoResponse request = " + request);
 
+        // 1.启动界面图片
         String url = "http://news-at.zhihu.com/api/4/start-image/%d*%d";
         url = String.format(url, request.width,request.height);
         GetStartInfoResponse response = call(url, GetStartInfoResponse.class);
@@ -60,37 +61,98 @@ public class ZhihuApiOkHttpImpl implements ZhihuApi {
 
     @Override
     public GetAllThemesResponse getAllThemesResponse(GetAllThemesRequest request) throws NetWorkException {
-        return null;
+        XLog.d("ZhihuApiOkHttpImpl.getAllThemesResponse request = " + request);
+
+        // 9.主题日报列表查看
+        String url = "http://news-at.zhihu.com/api/4/themes";
+        GetAllThemesResponse response = call(url, GetAllThemesResponse.class);
+
+        XLog.i(MSG, request, response);
+
+        return response;
     }
 
     @Override
     public GetLastThemeResponse getLastThemeResponse(GetLastThemeRequest request) throws NetWorkException {
-        return null;
+        XLog.d("ZhihuApiOkHttpImpl.getLastThemeResponse request = " + request);
+
+        // 3.最新消息
+        String url = "http://news-at.zhihu.com/api/4/news/latest";
+        GetLastThemeResponse response = call(url, GetLastThemeResponse.class);
+
+        XLog.i(MSG, request, response);
+
+        return response;
     }
 
     @Override
     public GetNewsResponse getNewsResponse(GetNewsRequest request) throws NetWorkException {
-        return null;
+        XLog.d("ZhihuApiOkHttpImpl.getNewsResponse request = " + request);
+
+        // 4.消息内容获取与离线下载
+        String url = "http://news-at.zhihu.com/api/4/news/%s";
+        url = String.format(url, request.id);
+        GetNewsResponse response = call(url, GetNewsResponse.class);
+
+        XLog.i(MSG, request, response);
+
+        return response;
     }
 
     @Override
     public GetThemeResponse getThemeResponse(GetThemeRequest request) throws NetWorkException {
-        return null;
+        XLog.d("ZhihuApiOkHttpImpl.getThemeResponse request = " + request);
+
+        // 10.主题日报内容查看
+        String url = "http://news-at.zhihu.com/api/4/theme/%s";
+        url = String.format(url, request.id);
+        GetThemeResponse response = call(url, GetThemeResponse.class);
+
+        XLog.i(MSG, request, response);
+
+        return response;
     }
 
     @Override
     public GetStoryExtraResponse getStoryExtraResponse(GetStoryExtraRequest request) throws NetWorkException {
-        return null;
+        XLog.d("ZhihuApiOkHttpImpl.getStoryExtraResponse request = " + request);
+
+        // 6. 新闻额外信息
+        String url = "http://news-at.zhihu.com/api/4/story-extra/%s";
+        url = String.format(url, request.id);
+        GetStoryExtraResponse response = call(url, GetStoryExtraResponse.class);
+
+        XLog.i(MSG, request, response);
+
+        return response;
     }
 
     @Override
     public GetShortCommentsResponse getShortCommentsResponse(GetShortCommentsRequest request) throws NetWorkException {
-        return null;
+        XLog.d("ZhihuApiOkHttpImpl.getShortComments request = " + request);
+
+        // 8. 新闻对应短评论查看
+        String url = "http://news-at.zhihu.com/api/4/story/%s/short-comments";
+        url = String.format(url, request.id);
+        GetShortCommentsResponse response = call(url, GetShortCommentsResponse.class);
+
+        XLog.i(MSG, request, response);
+
+        return response;
     }
 
     @Override
     public GetLongCommentsResponse getLongCommentsResponse(GetLongCommentsRequest request) throws NetWorkException {
-        return null;
+        XLog.d("ZhihuApiOkHttpImpl.getLongComments request = " + request);
+
+        // 7. 新闻对应长评论查看
+        String url = "http://news-at.zhihu.com/api/4/story/%s/long-comments";
+        url = String.format(url, request.id);
+        GetLongCommentsResponse response = call(url, GetLongCommentsResponse.class);
+
+        XLog.i(MSG, request, response);
+
+        return response;
     }
 
     <T> T call(String url, Class<T> tClass) throws NetWorkException {
