@@ -53,8 +53,10 @@ public class MvpHelper<P extends BaseMvpPresenter, V extends IMvpView> {
             if (params == null || params.length < 2){
                 break;
             }
-            // TODO: 2016/11/11
-        }
+            if (params[1] != null && params[1] instanceof Class){
+                vClass = (Class<V>) params[1];
+            }
+        }while (false);
+        return vClass;
     }
-
 }

@@ -52,7 +52,50 @@ public abstract class MvpActivity <P extends BaseMvpPresenter<V>, V extends IMvp
      * 通过反射获取{@link P} 和 {@link V}
      */
     protected void initPresenterAndView() {
-        MvpHelper<>
+        MvpHelper<P, V> mvpHelper = new MvpHelper<>(this);
+        view = getViewInstance();
+        Class<P> pClass = mvpHelper.getPresenterClass();
+        if (pClass != null){
+            try{
+                presenter = pClass.newInstance();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        XLog.d("view = " + view);
+        XLog.d("presenter = " + presenter);
     }
 
+    /**
+     * 返回实现{@link V}的实例，默认是当前Activity
+     *
+     * @return {@link V} 的实例
+     */
+    protected V getViewInstance() {
+        try{
+            Class<V> vClass = new MvpHelper<P, V>(this).getViewClass();
+            if (vClass != null && vClass.isInstance(this)){
+                return (V) this;
+            }
+        }catch (Exception e){
+            XLog.w(e.toString());
+        }
+        return null;
+    }
+
+    public void onEvent(Object object){
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (presenter != null){
+            // 反注册Activity
+            presenter.unregisterEventBusListener(this);
+            presenter.destory();
+        }
+        presenter = null;
+        view = null;
+
+        super.onDestroy();
+    }
 }
