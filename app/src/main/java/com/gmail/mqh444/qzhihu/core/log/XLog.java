@@ -37,7 +37,7 @@ public class XLog {
         return Log.i(Q_ZHIHU,msgLocal);
     }
 
-    public static int w(Throwable tr){
+    public static int w(String tr){
         return Log.w(Q_ZHIHU,tr);
     }
 
