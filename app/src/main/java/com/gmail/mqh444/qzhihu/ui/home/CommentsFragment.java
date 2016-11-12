@@ -4,25 +4,29 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorTreeAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gmail.mqh444.qzhihu.R;
 import com.gmail.mqh444.qzhihu.business.callback.AdvancedSubscriber;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.Comment;
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetLongCommentsResponse;
+import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetShortCommentsResponse;
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetStoryExtraResponse;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonExtraParam;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonMvpFragment;
+import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,7 +119,7 @@ public class CommentsFragment extends CommonMvpFragment<CommentsPresenter, Comme
                 item.bind((Comment) data.get(position));
             }else if (holder instanceof TypeTitle){
                 TypeTitle item = (TypeTitle) holder;
-                item.bind(Integer) data.get(position);
+                item.bind((Integer) data.get(position));
             }
         }
 
@@ -127,7 +131,7 @@ public class CommentsFragment extends CommonMvpFragment<CommentsPresenter, Comme
         void notifLong(GetLongCommentsResponse response) {
             data.clear();
             data.add(commentsExtraParam.storyExtraResponse.getLongComments());
-            data.addAll(Array.asList(response.getComments()));
+            data.addAll(Arrays.asList(response.getComments()));
             data.add(commentsExtraParam.storyExtraResponse.getShortComments());
 
             super.notifyDataSetChanged();
@@ -161,11 +165,72 @@ public class CommentsFragment extends CommonMvpFragment<CommentsPresenter, Comme
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(View v) {
             // 不是第一个
             if (getAdapterPosition() != 0 && !presenter.isLoadShort()){
-                presenter.
+                presenter.doGetShortComments(commentsExtraParam.id)
+                        .subscribe(new AdvancedSubscriber<GetShortCommentsResponse>(mvpActivity){
+                            @Override
+                            public void onHandleSuccess(GetShortCommentsResponse response){
+                                super.onHandleSuccess(response);
+
+                                adapter.notifShort(response);
+
+                                int top = itemView.getTop();
+                                recyclerView.scrollBy(0, top);
+                            }
+                        });
             }
         }
+    }
+
+    static class TypeItem extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.text)
+        TextView textView;
+
+        @BindView(R.id.text2)
+        TextView textView2;
+
+        @BindView(R.id.text3)
+        TextView textView3;
+
+        @BindView(R.id.icon)
+        ImageView icon;
+
+        SimpleDateFormat simpleDateFormat;
+
+        public TypeItem(View itemView){
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
+            simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            textView.setSingleLine();
+        }
+
+        void bind(Comment comment){
+            itemView.setTag(comment);
+            textView.setText(comment.getAuthor());
+            textView2.setText(comment.getContent());
+            textView3.setText(simpleDateFormat.format(new Date(comment.getTime() * 1000L)));
+
+            if (TextUtils.isEmpty(comment.getAvatar())){
+                icon.setImageResource(0);
+            }else {
+                Picasso.with(icon.getContext())
+                        .load(comment.getAvatar())
+                        .placeholder(R.drawable.ic_launcher)
+                        .into(icon);
+            }
+        }
+
+        @Override
+        public void onClick(View v){}
+    }
+
+    @Override
+    protected CommentsPresenter.ICommentsView getViewInstance() {
+        return new CommentsPresenter.ICommentsView(){
+        };
     }
 }
