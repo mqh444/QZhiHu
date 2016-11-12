@@ -12,11 +12,11 @@ import com.gmail.mqh444.qzhihu.core.log.XLog;
 import java.security.InvalidParameterException;
 
 /**
- * ActivityDeledate
+ * ActivityDelegate
  * Created by Louis on 2016/11/10.
  */
 
-public class ActivityDeledate <A extends AppCompatActivity, F extends Fragment> {
+public class ActivityDelegate<A extends AppCompatActivity, F extends Fragment> {
 
     private static final int FRAGMENT_CONTAINER = R.id.fmFragmentContainer;
 
@@ -24,7 +24,7 @@ public class ActivityDeledate <A extends AppCompatActivity, F extends Fragment> 
     private F commonFragment;
     private CommonExtraParam extraParam;
 
-    public ActivityDeledate(A activity) {
+    public ActivityDelegate(A activity) {
         if (activity == null){
             throw new InvalidParameterException("activity is null.");
         }

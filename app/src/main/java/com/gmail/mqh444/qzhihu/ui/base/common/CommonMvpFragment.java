@@ -10,6 +10,7 @@ import com.gmail.mqh444.qzhihu.ui.base.mvp.IMvpView;
 import com.gmail.mqh444.qzhihu.ui.base.mvp.MvpFragment;
 
 /**
+ * CommonMvpFragment
  * Created by Louis on 2016/11/11.
  */
 
@@ -56,5 +57,4 @@ public abstract class CommonMvpFragment<P extends BaseMvpPresenter<V>, V extends
     public boolean onActivitySupportNavigateUp(){
         return false;
     }
-
 }
