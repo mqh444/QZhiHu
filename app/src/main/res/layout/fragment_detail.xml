@@ -40,8 +40,8 @@
                 tools:text="所有人都被 duang 字洗脑了"/>
         </RelativeLayout>
 
-        <WebView
+        <WebView android:id="@+id/webView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 </ScrollView>

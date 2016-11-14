@@ -7,15 +7,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.gmail.mqh444.qzhihu.R;
+import com.gmail.mqh444.qzhihu.business.callback.AdvancedSubscriber;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeStory;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeTopStory;
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetLastThemeResponse;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonMvpFragment;
+import com.gmail.mqh444.qzhihu.ui.base.common.FragmentLauncher;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +54,35 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
     protected void init(Bundle savedInstanceState) {
         setTitle("今日热闻");
 
-        adapter = new Myadapter();
+        adapter = new MyAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
+        recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            @Override
+            public void onRefresh(){
+                doGetRequest();
+            }
+        });
+        doGetRequest();
+    }
+
+    void doGetRequest() {
+        presenter.doGetLastTheme()
+                .subscribe(new AdvancedSubscriber<GetLastThemeResponse>(){
+                    @Override
+                    public void onHandleSuccess(GetLastThemeResponse response){
+                        super.onHandleSuccess(response);
+
+                        update(response);
+                    }
+                });
+    }
+
+    void update(GetLastThemeResponse response) {
+        swipeRefreshLayout.setRefreshing(false);
+        adapter.notifyDataSetChanged(response);
     }
 
     class MyAdapter extends RecyclerView.Adapter{
@@ -80,7 +115,7 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
 
             if (viewType == TYPE_HEADER){
                 FragmentManager manager = getFragmentManager();
-                return new TypeHeader(layoutInflater.inflate(R.layout.item_last_header, parent, false));
+                return new TypeHeader(layoutInflater.inflate(R.layout.item_last_header, parent, false),manager);
             }else if (viewType == TYPE_ITEM){
                 return new TypeItem(layoutInflater.inflate(R.layout.item_last_item, parent, false));
             }else{
@@ -151,9 +186,50 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
         @Override
         public Fragment getItemId(int position) {
             TopItemFragment fragment = new TopItemFragment();
-            fragment.setTopStory
-            return super.getItemId(position);
+            fragment.setTopStory(tops.get(position));
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            if (tops != null){
+                return tops.size();
+            }
+            return 0;
         }
     }
 
+    static class TypeItem extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @BindView(R.id.text)
+        TextView textView;
+        @BindView(R.id.icon)
+        ImageView icon;
+
+        public TypeItem(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
+        }
+
+        void bind(LastThemeStory story){
+            itemView.setTag(story);
+            textView.setText(story.getTitle());
+            if (story.getImages() != null && story.getImages().length > 0){
+                Picasso.with(icon.getContext())
+                        .load(story.getImages()[0])
+                        .placeholder(R.drawable.ic_launcher)
+                        .into(icon);
+            }
+        }
+
+        @Override
+        public void onClick(View v){
+            LastThemeStory story = (LastThemeStory) v.getTag();
+            DetailFragment.DetailExtraParam param = new DetailFragment.DetailExtraParam();
+            param.id =story.getId();
+            FragmentLauncher.launch(v.getContext(),param);
+        }
+    }
 }

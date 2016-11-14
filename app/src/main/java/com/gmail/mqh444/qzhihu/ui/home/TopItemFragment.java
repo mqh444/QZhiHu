@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gmail.mqh444.qzhihu.R;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeTopStory;
+import com.gmail.mqh444.qzhihu.ui.base.common.FragmentLauncher;
 import com.gmail.mqh444.qzhihu.ui.base.mvp.MvpFragment;
 import com.squareup.picasso.Picasso;
 
@@ -49,8 +51,15 @@ public class TopItemFragment extends MvpFragment {
 
             @Override
             public void onClick(View view) {
-                DetailF
+                DetailFragment.DetailExtraParam param = new DetailFragment.DetailExtraParam();
+                param.setFragmentClass(DetailFragment.class);
+                param.id = topStory.getId();
+                FragmentLauncher.launch(view.getContext(),param);
             }
         });
+    }
+
+    public void setTopStory(LastThemeTopStory topStory){
+        this.topStory = topStory;
     }
 }

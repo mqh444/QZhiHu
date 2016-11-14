@@ -2,12 +2,10 @@ package com.gmail.mqh444.qzhihu.ui.home;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.style.UpdateAppearance;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -48,7 +46,7 @@ public class DetailFragment extends CommonMvpFragment<DetailPresenter, DetailPre
     RelativeLayout rlDetailTop;
     @BindView(R.id.icon)
     ImageView icon;
-    @BindView(R.id.webview)
+    @BindView(R.id.webView)
     WebView webView;
     @BindView(R.id.tvTitle)
     TextView tvTitle;
@@ -57,6 +55,11 @@ public class DetailFragment extends CommonMvpFragment<DetailPresenter, DetailPre
 
     DetailExtraParam extraParam;
     GetStoryExtraResponse storyExtraResponse;
+
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.fragment_detail;
+    }
 
     @Override
     protected void init(Bundle savedInstanceState) {
