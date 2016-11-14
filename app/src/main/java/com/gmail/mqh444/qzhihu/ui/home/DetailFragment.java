@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.text.style.UpdateAppearance;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -14,11 +15,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.gmail.mqh444.qzhihu.R;
 import com.gmail.mqh444.qzhihu.business.callback.AdvancedSubscriber;
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetNewsResponse;
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetStoryExtraResponse;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonExtraParam;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonMvpFragment;
+import com.gmail.mqh444.qzhihu.ui.base.common.FragmentLauncher;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -111,15 +114,42 @@ public class DetailFragment extends CommonMvpFragment<DetailPresenter, DetailPre
                         .load(response.getImage())
                         .into(icon);
             }
-            webView.loadDataWithBaseURL(null, response.getBody(), "text/html", "utf-8", null);
+            webView.loadDataWithBaseURL(null, response.getBody(), "text/html", "utf8", null);
         }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.detail, menu);
-        // TODO: 2016/11/13
+        super.onCreateOptionsMenu(menu,inflater);
 
-        super.onCreateOptionsMenu(menu, inflater);
+        if (storyExtraResponse != null){
+            if (storyExtraResponse.getComments() > 0){
+                String title = String.format("评论(%d)", storyExtraResponse.getComments());
+                menu.findItem(R.id.menu_comments).setTitle(title);
+            }
+            if (storyExtraResponse.getPopularity() > 0){
+                String title = String.format("赞(%d)", storyExtraResponse.getPopularity());
+                menu.findItem(R.id.menu_popularity).setTitle(title);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_comments && storyExtraResponse != null){
+            CommentsFragment.CommentsExtraParam param = new CommentsFragment.CommentsExtraParam();
+            param.id = extraParam.id;
+            param.storyExtraResponse = storyExtraResponse;
+            param.setFragmentClass(CommentsFragment.class);
+            FragmentLauncher.launch(this, param, 0);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected DetailPresenter.IDetailView getViewInstance() {
+        return new DetailPresenter.IDetailView(){};
     }
 }
