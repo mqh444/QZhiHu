@@ -137,7 +137,7 @@ public class CommentsFragment extends CommonMvpFragment<CommentsPresenter, Comme
             super.notifyDataSetChanged();
         }
 
-        void notifShort(GetStoryExtraResponse response){
+        void notifShort(GetShortCommentsResponse response){
             data.addAll(Arrays.asList(response.getComments()));
 
             super.notifyDataSetChanged();

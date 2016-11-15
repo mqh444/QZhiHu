@@ -1,12 +1,10 @@
 package com.gmail.mqh444.qzhihu.ui.base.common;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 
-import com.gmail.mqh444.qzhihu.app.InjectHelp;
-import com.gmail.mqh444.qzhihu.ui.home.DetailFragment;
 
 /**
  * FragmentLauncher
@@ -31,7 +29,7 @@ public class FragmentLauncher {
         }
     }
 
-    public static void launch(DetailFragment activity, CommonExtraParam param, int req){
+    public static void launch(Activity activity, CommonExtraParam param, int req){
         Intent it = new Intent(activity, getTargetActivityClass(param));
 
         it.putExtra(ICommonFragment.EXTRA_REQ,param);
