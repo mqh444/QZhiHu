@@ -22,15 +22,6 @@ public class GetAllThemesResponse extends BaseResponse {
     @SerializedName("others")
     private ThemeItem[] others;
 
-    @Override
-    public String toString() {
-        return "GetAllThemesResponse{" +
-                "limit=" + limit +
-                ", subscribed=" + Arrays.toString(subscribed) +
-                ", others=" + Arrays.toString(others) +
-                "} " + super.toString();
-    }
-
     public int getLimit() {
         return limit;
     }
@@ -55,4 +46,12 @@ public class GetAllThemesResponse extends BaseResponse {
         this.others = others;
     }
 
+    @Override
+    public String toString() {
+        return "GetAllThemesResponse{" +
+                "limit=" + limit +
+                ", subscribed=" + Arrays.toString(subscribed) +
+                ", others=" + Arrays.toString(others) +
+                "} " + super.toString();
+    }
 }

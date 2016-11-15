@@ -13,6 +13,9 @@ import java.util.Arrays;
 
 public class GetLongCommentsResponse extends BaseResponse {
 
+    @SerializedName("comments")
+    private Comment[] comments;
+
     public Comment[] getComments() {
         return comments;
     }
@@ -20,9 +23,6 @@ public class GetLongCommentsResponse extends BaseResponse {
     public void setComments(Comment[] comments) {
         this.comments = comments;
     }
-
-    @SerializedName("comments")
-    private Comment[] comments;
 
     @Override
     public String toString() {

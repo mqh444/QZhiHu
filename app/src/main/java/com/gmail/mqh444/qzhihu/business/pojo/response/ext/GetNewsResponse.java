@@ -12,6 +12,36 @@ import java.util.Arrays;
 
 public class GetNewsResponse extends BaseResponse {
 
+    @SerializedName("id")
+    private int id;
+
+    @SerializedName("type")
+    private int type;
+
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("image")
+    private String image;
+
+    @SerializedName("image_source")
+    private String imageSource;
+
+    @SerializedName("body")
+    private String body;
+
+    @SerializedName("share_url")
+    private String shareUrl;
+
+    @SerializedName("css")
+    private String[] css;
+
+    @SerializedName("js")
+    private String[] js;
+
+    @SerializedName("ga_prefix")
+    private String gaPrefix;
+
     public int getId() {
         return id;
     }
@@ -92,41 +122,11 @@ public class GetNewsResponse extends BaseResponse {
         this.gaPrefix = gaPrefix;
     }
 
-    @SerializedName("id")
-    private int id;
-
-    @SerializedName("type")
-    private int type;
-
-    @SerializedName("title")
-    private String title;
-
-    @SerializedName("images")
-    private String image;
-
-    @SerializedName("image_source")
-    private String imageSource;
-
-    @SerializedName("body")
-    private String body;
-
-    @SerializedName("share_url")
-    private String shareUrl;
-
-    @SerializedName("css")
-    private String[] css;
-
-    @SerializedName("js")
-    private String[] js;
-
-    @SerializedName("ga_prefix")
-    private String gaPrefix;
-
     @Override
     public String toString() {
         return "GetNewsResponse{" +
                 "id=" + id +
-                ", type='" + type +
+                ", type=" + type +
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", imageSource='" + imageSource + '\'' +

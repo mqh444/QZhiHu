@@ -13,6 +13,9 @@ public class GetStartInfoResponse extends BaseResponse {
     @SerializedName("text")
     private String text;
 
+    @SerializedName("img")
+    private String img;
+
     public String getText() {
         return text;
     }
@@ -29,12 +32,9 @@ public class GetStartInfoResponse extends BaseResponse {
         this.img = img;
     }
 
-    @SerializedName("img")
-    private String img;
-
     @Override
     public String toString() {
-        return "StartInfoResponse{" +
+        return "GetStartInfoResponse{" +
                 "text='" + text + '\'' +
                 ", img='" + img + '\'' +
                 "} " + super.toString();

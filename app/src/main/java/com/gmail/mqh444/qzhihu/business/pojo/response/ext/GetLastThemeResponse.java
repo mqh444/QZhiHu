@@ -1,7 +1,7 @@
 package com.gmail.mqh444.qzhihu.business.pojo.response.ext;
 
-import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeTopStory;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeStory;
+import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeTopStory;
 import com.gmail.mqh444.qzhihu.business.pojo.response.BaseResponse;
 import com.google.gson.annotations.SerializedName;
 
@@ -22,15 +22,6 @@ public class GetLastThemeResponse extends BaseResponse {
 
     @SerializedName("top_stories")
     private LastThemeTopStory[] topStories;
-
-    @Override
-    public String toString() {
-        return "GetLastThemeResponse{" +
-                "date='" + date + '\'' +
-                ", stories=" + Arrays.toString(stories) +
-                ", top_stories=" + Arrays.toString(topStories) +
-                "} " + super.toString();
-    }
 
     public String getDate() {
         return date;
@@ -56,4 +47,12 @@ public class GetLastThemeResponse extends BaseResponse {
         this.topStories = topStories;
     }
 
+    @Override
+    public String toString() {
+        return "GetLastThemeResponse{" +
+                "date='" + date + '\'' +
+                ", stories=" + Arrays.toString(stories) +
+                ", topStories=" + Arrays.toString(topStories) +
+                "} " + super.toString();
+    }
 }
