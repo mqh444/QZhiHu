@@ -2,10 +2,7 @@ package com.gmail.mqh444.qzhihu.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +15,10 @@ import android.widget.TextView;
 import com.gmail.mqh444.qzhihu.R;
 import com.gmail.mqh444.qzhihu.business.callback.AdvancedSubscriber;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeStory;
-import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeTopStory;
-import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetLastThemeResponse;
-import com.gmail.mqh444.qzhihu.ui.base.common.CommonMvpFragment;
+import com.gmail.mqh444.qzhihu.business.pojo.bean.ThemeItem;
+import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetThemeResponse;
 import com.gmail.mqh444.qzhihu.ui.base.common.FragmentLauncher;
+import com.gmail.mqh444.qzhihu.ui.base.mvp.MvpFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,31 +29,46 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * HotnewsFragment
- * Created by Louis on 2016/11/13.
+ * OtherThemeFragment
+ * Created by Louis on 2016/11/14.
  */
 
-public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, HotnewsPresenter.IHotnewsView> {
+public class OtherThemeFragment extends MvpFragment<OtherThemePresenter, OtherThemePresenter.IHomeView> {
+
+    static final String EXTRA_ITEM = "themeItem";
+
+    public static OtherThemeFragment newInstance(ThemeItem themeItem){
+        OtherThemeFragment fragment = new OtherThemeFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_ITEM, themeItem);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    ThemeItem themeItem;
     MyAdapter adapter;
 
     @Override
     protected int getFragmentLayout() {
-        return R.layout.fragment_hotnews;
+        return R.layout.fragment_home;
     }
 
     @Override
-    protected void init(Bundle savedInstanceState) {
-        setTitle("今日热闻");
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        themeItem = (ThemeItem) getArguments().getSerializable(EXTRA_ITEM);
 
         adapter = new MyAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adapter);
+
+        setTitle(themeItem.getName());
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
@@ -65,43 +77,35 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
                 doGetRequest();
             }
         });
-        doGetRequest();
     }
 
-    void doGetRequest() {
-        presenter.doGetLastTheme()
-                .subscribe(new AdvancedSubscriber<GetLastThemeResponse>(){
-                    @Override
-                    public void onHandleSuccess(GetLastThemeResponse response){
-                        super.onHandleSuccess(response);
-
-                        update(response);
-                    }
+    private void doGetRequest() {
+        presenter.doGetThemeById(themeItem.getId())
+                .subscribe(new AdvancedSubscriber<GetThemeResponse>(){
+                   @Override
+                    public void onHandleSuccess(GetThemeResponse response){
+                       super.onHandleSuccess(response);
+                       update(response);
+                   }
                 });
     }
 
-    void update(GetLastThemeResponse response) {
-        swipeRefreshLayout.setRefreshing(false);
+    void update(GetThemeResponse response) {
         adapter.notifyDataSetChanged(response);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
-    protected HotnewsPresenter.IHotnewsView getViewInstance() {
-        return new HotnewsPresenter.IHotnewsView(){};
-    }
-
-    class MyAdapter extends RecyclerView.Adapter{
+    class MyAdapter extends RecyclerView.Adapter {
 
         static final int TYPE_HEADER = 1;
         static final int TYPE_ITEM = 2;
         static final int TYPE_TITLE = 3;
 
         List<Object> data;
-        List<LastThemeTopStory> tops;
+        GetThemeResponse getThemeResponse;
 
-        {
+        MyAdapter(){
             data = new ArrayList<>();
-            tops = new ArrayList<>();
         }
 
         @Override
@@ -116,15 +120,14 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             if (viewType == TYPE_HEADER){
-                FragmentManager manager = getFragmentManager();
-                return new TypeHeader(layoutInflater.inflate(R.layout.item_last_header, parent, false),manager);
+                return new TypeHeader(layoutInflater.inflate(R.layout.item_top_item_fragment, parent, false));
             }else if (viewType == TYPE_ITEM){
-                return new TypeItem(layoutInflater.inflate(R.layout.item_last_item, parent, false));
-            }else{
-                return new TypeTitle(layoutInflater.inflate(R.layout.item_last_title, parent, false));
+                return new TypeItem(layoutInflater.inflate(R.layout.item_last_item,parent,false));
+            }else {
+                return new TypeTitle(layoutInflater.inflate(R.layout.item_last_title,parent,false));
             }
         }
 
@@ -132,11 +135,8 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof TypeHeader){
                 TypeHeader item = (TypeHeader) holder;
-                item.bind(tops);
+                item.bind(getThemeResponse);
             }else if (holder instanceof TypeItem){
-                TypeItem item = (TypeItem) holder;
-                item.bind((LastThemeStory) data.get(position - 1));
-            }else if (holder instanceof TypeTitle){
                 TypeTitle item = (TypeTitle) holder;
                 item.bind((String) data.get(position - 1));
             }
@@ -147,60 +147,38 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
             return data.size();
         }
 
-        void notifyDataSetChanged(GetLastThemeResponse response){
+        void notifyDataSetChanged(GetThemeResponse response){
             data.clear();
             data.addAll(Arrays.asList(response.getStories()));
-            tops.clear();
-            tops.addAll(Arrays.asList(response.getTopStories()));
+            this.getThemeResponse = response;
 
             super.notifyDataSetChanged();
         }
     }
 
+    @Override
+    protected OtherThemePresenter.IHomeView getViewInstance() {
+        return new OtherThemePresenter.IHomeView() {
+        };
+    }
+
     static class TypeHeader extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.viewPager)
-        ViewPager viewPager;
-        FragmentManager fragmentManager;
+        @BindView(R.id.text)
+        TextView textView;
+        @BindView(R.id.icon)
+        ImageView icon;
 
-        public TypeHeader(View itemView, FragmentManager manager){
+        public TypeHeader(View itemView) {
             super(itemView);
-            this.fragmentManager = manager;
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(List<LastThemeTopStory> tops){
-            List<LastThemeTopStory> topsLocal = tops;
-            if (tops == null){
-                topsLocal = new ArrayList<>();
-            }
-
-            viewPager.setAdapter(new MyFragmentPagerAdapter(fragmentManager, topsLocal));
-        }
-    }
-
-    static class MyFragmentPagerAdapter extends FragmentPagerAdapter{
-
-        List<LastThemeTopStory> tops;
-
-        public MyFragmentPagerAdapter(FragmentManager fm,List<LastThemeTopStory> tops){
-            super(fm);
-            this.tops = tops;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            TopItemFragment fragment = new TopItemFragment();
-            fragment.setTopStory(tops.get(position));
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            if (tops != null){
-                return tops.size();
-            }
-            return 0;
+        void bind(GetThemeResponse response){
+            textView.setText(response.getName());
+            Picasso.with(icon.getContext())
+                    .load(response.getImage())
+                    .into(icon);
         }
     }
 
@@ -219,16 +197,17 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
         }
     }
 
-    static class TypeItem extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    static class TypeItem extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.text)
         TextView textView;
         @BindView(R.id.icon)
         ImageView icon;
 
-        public TypeItem(View itemView) {
+        public TypeItem(View itemView){
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            ButterKnife.bind(this,itemView);
 
             itemView.setOnClickListener(this);
         }
@@ -245,14 +224,12 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
         }
 
         @Override
-        public void onClick(View v){
-            LastThemeStory story = (LastThemeStory) v.getTag();
+        public void onClick(View view) {
+            LastThemeStory story = (LastThemeStory) view.getTag();
             DetailFragment.DetailExtraParam param = new DetailFragment.DetailExtraParam();
             param.setFragmentClass(DetailFragment.class);
             param.id = story.getId();
-            FragmentLauncher.launch(v.getContext(), param);
+            FragmentLauncher.launch(view.getContext(), param);
         }
     }
-
-
 }
