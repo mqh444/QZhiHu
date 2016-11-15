@@ -2,6 +2,7 @@ package com.gmail.mqh444.qzhihu.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -186,15 +187,19 @@ public class CommentsFragment extends CommonMvpFragment<CommentsPresenter, Comme
 
     static class TypeItem extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.text)
+        @Nullable
         TextView textView;
 
         @BindView(R.id.text2)
+        @Nullable
         TextView textView2;
 
         @BindView(R.id.text3)
+        @Nullable
         TextView textView3;
 
         @BindView(R.id.icon)
+        @Nullable
         ImageView icon;
 
         SimpleDateFormat simpleDateFormat;

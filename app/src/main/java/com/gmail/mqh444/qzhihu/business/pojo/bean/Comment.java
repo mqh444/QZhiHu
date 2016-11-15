@@ -11,6 +11,24 @@ import java.io.Serializable;
 
 public class Comment implements Serializable {
 
+    @SerializedName("id")
+    private int id;
+
+    @SerializedName("author")
+    private String author;
+
+    @SerializedName("content")
+    private String content;
+
+    @SerializedName("likes")
+    private int likes;
+
+    @SerializedName("time")
+    private long time;
+
+    @SerializedName("avatar")
+    private String avatar;
+
     public int getId() {
         return id;
     }
@@ -58,24 +76,6 @@ public class Comment implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
-    @SerializedName("id")
-    private int id;
-
-    @SerializedName("author")
-    private String author;
-
-    @SerializedName("content")
-    private String content;
-
-    @SerializedName("likes")
-    private int likes;
-
-    @SerializedName("time")
-    private long time;
-
-    @SerializedName("avatar")
-    private String avatar;
 
     @Override
     public String toString() {
