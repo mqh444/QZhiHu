@@ -133,10 +133,13 @@ public class OtherThemeFragment extends MvpFragment<OtherThemePresenter, OtherTh
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof TypeHeader){
+            if (holder instanceof TypeHeader) {
                 TypeHeader item = (TypeHeader) holder;
                 item.bind(getThemeResponse);
-            }else if (holder instanceof TypeItem){
+            }else if(holder instanceof TypeItem) {
+                TypeItem item = (TypeItem) holder;
+                item.bind((LastThemeStory) data.get(position - 1));
+            }else if (holder instanceof TypeTitle){
                 TypeTitle item = (TypeTitle) holder;
                 item.bind((String) data.get(position - 1));
             }

@@ -109,7 +109,7 @@ public class CommentsFragment extends CommonMvpFragment<CommentsPresenter, Comme
             if (viewType == TYPE_ITEM){
                 return new TypeItem(layoutInflater.inflate(R.layout.item_last_comment, parent, false));
             }else {
-                return new TypeItem(layoutInflater.inflate(R.layout.item_last_title, parent, false));
+                return new TypeTitle(layoutInflater.inflate(R.layout.item_last_title, parent, false));
             }
         }
 
