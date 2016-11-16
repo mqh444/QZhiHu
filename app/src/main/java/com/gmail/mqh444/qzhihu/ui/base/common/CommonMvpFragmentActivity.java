@@ -43,7 +43,7 @@ public class CommonMvpFragmentActivity extends MvpActivity {
 
     public void onBackPressed(){
         if (getCommonFragment() != null) {
-            if (getCommonFragment().onActivityPressBack()) {
+            if (!getCommonFragment().onActivityPressBack()) {
                 super.onBackPressed();
             }
         }else {
