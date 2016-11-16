@@ -34,7 +34,7 @@ public class FragmentDelegate<F extends Fragment, P extends CommonExtraParam> {
     public void afterOnViewCreated(View view, Bundle saveInstanceState){
         XLog.i("afterOnViewCreated");
 
-        extraReqParam = CommonExtraParam.getReqExtraParam(fragment.getActivity());
+        extraReqParam = CommonExtraParam.getExtraReqParam(fragment.getActivity());
 
         String content = String.format("fragment = %s, extraReqParam = %s", fragment, extraReqParam);
         XLog.d(content);

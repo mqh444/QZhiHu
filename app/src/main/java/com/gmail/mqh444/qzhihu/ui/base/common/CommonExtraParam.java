@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 public class CommonExtraParam implements Serializable, IValidate {
 
-    public static <R extends CommonExtraParam> R getReqExtraParam(Activity activity){
+    public static <R extends CommonExtraParam> R getExtraReqParam(Activity activity){
         try{
             return (R) activity.getIntent().getSerializableExtra(ICommonFragment.EXTRA_REQ);
         }catch (Exception e){
