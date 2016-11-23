@@ -25,7 +25,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textColor="#fff"
-                android:textSize="16sp"
+                android:textSize="@dimen/title_text_size"
                 tools:text="2015 ACG 大事件：不管你宅不宅，所有人都被 duang 字洗脑了"/>
             <TextView android:id="@+id/tvSource"
                 android:layout_width="match_parent"

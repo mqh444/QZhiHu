@@ -63,7 +63,7 @@ public class ZhihuDomainImpl implements ZhihuDomain {
                     @Override
                     public Observable<GetAllThemesResponse> call(GetAllThemesRequest request) {
                         try{
-                            GetAllThemesResponse response =zhihuApi.getAllThemesResponse(request);
+                            GetAllThemesResponse response = zhihuApi.getAllThemesResponse(request);
                             return Observable.just(response);
                         }catch (NetWorkException e){
                             return Observable.error(e);

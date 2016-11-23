@@ -72,10 +72,13 @@ public class DetailFragment extends CommonMvpFragment<DetailPresenter, DetailPre
             }
         });
 
+        // WebView设置参数
         // 启动支持javascript
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDefaultTextEncodingName("utf-8");
+        settings.setTextZoom(100);
+        settings.setDefaultFontSize(18);
 
         setHasOptionsMenu(true);
         doGetRequest();
