@@ -21,6 +21,7 @@ import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeStory;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeTopStory;
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetLastThemeResponse;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonMvpFragment;
+import com.gmail.mqh444.qzhihu.ui.base.common.DividerItemDecoration;
 import com.gmail.mqh444.qzhihu.ui.base.common.FragmentLauncher;
 import com.squareup.picasso.Picasso;
 
@@ -57,6 +58,9 @@ public class HotnewsFragment extends CommonMvpFragment<HotnewsPresenter, Hotnews
         adapter = new MyAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adapter);
+
+        // 添加item分割线
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){

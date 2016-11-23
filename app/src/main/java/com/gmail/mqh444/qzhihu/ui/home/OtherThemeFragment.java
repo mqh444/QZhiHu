@@ -17,6 +17,7 @@ import com.gmail.mqh444.qzhihu.business.callback.AdvancedSubscriber;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.LastThemeStory;
 import com.gmail.mqh444.qzhihu.business.pojo.bean.ThemeItem;
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetThemeResponse;
+import com.gmail.mqh444.qzhihu.ui.base.common.DividerItemDecoration;
 import com.gmail.mqh444.qzhihu.ui.base.common.FragmentLauncher;
 import com.gmail.mqh444.qzhihu.ui.base.mvp.MvpFragment;
 import com.squareup.picasso.Picasso;
@@ -68,6 +69,9 @@ public class OtherThemeFragment extends MvpFragment<OtherThemePresenter, OtherTh
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adapter);
 
+        // 添加item分割线
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+
         setTitle(themeItem.getName());
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -77,6 +81,7 @@ public class OtherThemeFragment extends MvpFragment<OtherThemePresenter, OtherTh
                 doGetRequest();
             }
         });
+        doGetRequest();
     }
 
     private void doGetRequest() {

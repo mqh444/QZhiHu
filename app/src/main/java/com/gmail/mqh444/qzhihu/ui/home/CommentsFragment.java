@@ -20,6 +20,7 @@ import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetShortCommentsRespon
 import com.gmail.mqh444.qzhihu.business.pojo.response.ext.GetStoryExtraResponse;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonExtraParam;
 import com.gmail.mqh444.qzhihu.ui.base.common.CommonMvpFragment;
+import com.gmail.mqh444.qzhihu.ui.base.common.DividerItemDecoration;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -74,6 +75,9 @@ public class CommentsFragment extends CommonMvpFragment<CommentsPresenter, Comme
         adapter = new MyAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+
+        // 添加item分割线
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
 
         doGetRequest();
     }
